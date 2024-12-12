@@ -72,7 +72,7 @@ public class ShiroRealm extends AuthorizingRealm {
             List<SysRolePermission> sysRolePermissions = sysRolePermissionMapper.selectByRoleId(sysRole.getId());\n
             for (SysRolePermission sysRolePermission : sysRolePermissions) {
                 SysPermission sysPermission = sysPermissionMapper.selectById(sysRolePermission.getSysPermissionId());
-                permissions.add(sysPermission.getCode());
+                permissions.add(sysPermission.getCode());\n
             }
         }
         info.addRoles(roles);
