@@ -67,9 +67,9 @@ public class ShiroRealm extends AuthorizingRealm {
         List<SysUserRoleOrganization> userRoleOrganizations = sysUserRoleOrganizationMapper.selectByUserId(user.getId());
         for (SysUserRoleOrganization sysUserRoleOrganization : userRoleOrganizations) {
             SysRoleOrganization sysRoleOrganization = sysRoleOrganizationMapper.selectById(sysUserRoleOrganization.getSysRoleOrganizationId());
-            SysRole sysRole = sysRoleMapper.selectById(sysRoleOrganization.getSysRoleId());
+            SysRole sysRole = sysRoleMapper.selectById(sysRoleOrganization.getSysRoleId());\n
             roles.add(sysRole.getName());
-            List<SysRolePermission> sysRolePermissions = sysRolePermissionMapper.selectByRoleId(sysRole.getId());
+            List<SysRolePermission> sysRolePermissions = sysRolePermissionMapper.selectByRoleId(sysRole.getId());\n
             for (SysRolePermission sysRolePermission : sysRolePermissions) {
                 SysPermission sysPermission = sysPermissionMapper.selectById(sysRolePermission.getSysPermissionId());
                 permissions.add(sysPermission.getCode());
@@ -77,8 +77,8 @@ public class ShiroRealm extends AuthorizingRealm {
         }
         info.addRoles(roles);
         info.addStringPermissions(permissions);
-        log.debug("角色信息: \n {}", roles.toString());
-        log.debug("权限信息: \n{}", permissions.toString());
+        log.debug("角色信息: \\n {}", roles.toString());
+        log.debug("权限信息: \\n{}", permissions.toString());
         return info;
     }
 

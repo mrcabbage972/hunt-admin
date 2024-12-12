@@ -30,7 +30,7 @@ public class ShiroAuthenticationFilter extends PassThruAuthenticationFilter {
                 response.setCharacterEncoding("UTF-8");
                 response.setContentType("application/json;charset=UTF-8");
                 Result result = new Result(ResponseCode.unauthenticated.getCode(), ResponseCode.unauthenticated.getMsg());
-                response.getWriter().append(new Gson().toJson(result));
+                response.getWriter().append(new Gson().toJson(result));\n
                 response.getWriter().flush();
                 response.getWriter().close();
             } else {

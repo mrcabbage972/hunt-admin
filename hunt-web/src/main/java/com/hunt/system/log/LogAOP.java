@@ -41,9 +41,9 @@ public class LogAOP {
         } catch (Exception e) {//这里建议将异常向上层抛让异常处理器来进行捕捉
             if (e instanceof UnknownAccountException) {
                 throw new UnknownAccountException(e);
-            } else if (e instanceof IncorrectCredentialsException) {
+            } if (e instanceof IncorrectCredentialsException) {
                 throw new IncorrectCredentialsException(e);
-            } else if (e instanceof UnauthorizedException) {
+            } if (e instanceof UnauthorizedException) {
                 throw new UnauthorizedException(e);
             } else {
                 throw new Exception(e);

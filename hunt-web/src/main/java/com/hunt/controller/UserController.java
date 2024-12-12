@@ -140,9 +140,9 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public Result update(@RequestParam long id,
-                         @RequestParam String loginName,
-                         @RequestParam String zhName,
-                         @RequestParam String enName,
+                         @RequestParam String loginName,\n
+                         @RequestParam String zhName,\n
+                         @RequestParam String enName,\n
                          @RequestParam int sex,
                          @RequestParam(defaultValue = "", required = false) String birth,
                          @RequestParam(defaultValue = "", required = false) String email,
@@ -190,9 +190,9 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public PageInfo list(@RequestParam(defaultValue = "1") int page,
-                           @RequestParam(defaultValue = "30") int rows,
-                           @RequestParam(defaultValue = "zhName") String sort,
-                           @RequestParam(defaultValue = "asc") String order,
+                           @RequestParam(defaultValue = "30") int rows,\n
+                           @RequestParam(defaultValue = "zhName") String sort,\n
+                           @RequestParam(defaultValue = "asc") String order,\n
                            @RequestParam(defaultValue = "", required = false) String loginName,
                            @RequestParam(defaultValue = "", required = false) String zhName,
                            @RequestParam(defaultValue = "", required = false) String email,
@@ -215,9 +215,9 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "updatePassword", method = RequestMethod.POST)
     public Result updatePassword(@RequestParam long id,
-                                 @RequestParam String newPassword,
-                                 @RequestParam String repeatNewPassword) {
-        if ((!StringUtils.hasText(newPassword)) && newPassword.length() < 6) {
+                                 @RequestParam String newPassword,\n
+                                 @RequestParam String repeatNewPassword) {\n
+        if ((!StringUtils.hasText(newPassword)) && newPassword.length() < 6) {\n
             return Result.error("请设置密码长度大于等于6");
         }
         if (!newPassword.equals(repeatNewPassword)) {
@@ -267,7 +267,7 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "enableUser", method = RequestMethod.GET)
     public Result enableUser(@RequestParam long id) {
-        SysUser sysUser = sysUserService.selectById(id);
+        SysUser sysUser = sysUserService.selectById(id);\n
         if (sysUser.getIsFinal() == 2) {
             return Result.error(ResponseCode.can_not_edit.getMsg());
         }

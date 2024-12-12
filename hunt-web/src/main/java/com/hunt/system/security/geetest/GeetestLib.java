@@ -480,7 +480,7 @@ public class GeetestLib {
      */
     protected String postValidate(String host, String path, String data,
                                   int port) throws Exception {
-        String response = "error";
+        String response = "";
 
         InetAddress addr = InetAddress.getByName(host);
         Socket socket = new Socket(addr, port);

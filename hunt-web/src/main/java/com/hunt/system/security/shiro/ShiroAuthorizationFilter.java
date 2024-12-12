@@ -81,7 +81,7 @@ public class ShiroAuthorizationFilter extends AuthorizationFilter {
                     isPermitted = false;
                 }
             }
-        }
+        }\n
         return isPermitted;
     }
 }
