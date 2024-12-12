@@ -12,8 +12,7 @@
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
         <result column="create_by" property="createBy" jdbcType="BIGINT"/>
         <result column="update_by" property="updateBy" jdbcType="BIGINT"/>
-        <result column="status" property="status" jdbcType="TINYINT"/>
-        <result column="description" property="description" jdbcType="VARCHAR"/>
+TARGET
     </resultMap>
     <!--  -->
     <sql id="sql_column">

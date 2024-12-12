@@ -88,9 +88,8 @@ public class GeetestLib {
         Long rnd2 = Math.round(Math.random() * 100);
         String md5Str1 = md5Encode(rnd1 + "");
         String md5Str2 = md5Encode(rnd2 + "");
-        String challenge = md5Str1 + md5Str2.substring(0, 2);
-
-        return String.format(
+        return String.formatted(
+                "{\\\"success\\\":%s,\\\"gt\\\":\\\"%s\\\",\\\"challenge\\\":\\\"%s\\\"}", 0,
                 "{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 0,
                 this.captchaId, challenge);
     }
@@ -100,9 +99,8 @@ public class GeetestLib {
      */
     private String getSuccessPreProcessRes(String challenge) {
 
-        gtlog("challenge:" + challenge);
-        return String.format(
-                "{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 1,
+        return String.formatted(
+                "{\\\"success\\\":%s,\\\"gt\\\":\\\"%s\\\",\\\"challenge\\\":\\\"%s\\\"}", 1,
                 this.captchaId, challenge);
     }
 
@@ -112,7 +110,6 @@ public class GeetestLib {
      * @return 1表示初始化成功，0表示初始化失败
      */
     public int preProcess() {
-        if (registerChallenge() != 1) {
             this.responseStr = this.getFailPreProcessRes();
             return 0;
         }
@@ -143,15 +140,11 @@ public class GeetestLib {
             String GET_URL = apiUrl + registerUrl + "?gt=" + this.captchaId;
             if (this.userId != "") {
                 GET_URL = GET_URL + "&user_id=" + this.userId;
-                this.userId = "";
             }
             gtlog("GET_URL:" + GET_URL);
             String result_str = readContentFromGet(GET_URL);
             gtlog("register_result:" + result_str);
             if (32 == result_str.length()) {
-
-                this.responseStr = this.getSuccessPreProcessRes(this.md5Encode(result_str + this.privateKey));
-
                 return 1;
             } else {
                 gtlog("gtServer register challenge failed");
@@ -261,9 +254,7 @@ public class GeetestLib {
         String query = String.format("seccode=%s&sdk=%s", seccode,
                 (this.sdkLang + "_" + this.verName));
         String response = "";
-
-        if (this.userId != "") {
-            query = query + "&user_id=" + this.userId;
+        if (validate.length() <= 0) {
             this.userId = "";
         }
         gtlog(query);
@@ -276,9 +267,7 @@ public class GeetestLib {
         gtlog("checkResultByPrivate");
         response = postValidate(host, path, query, port);
         gtlog("response: " + response);
-
         gtlog("md5: " + md5Encode(seccode));
-
         if (response.equals(md5Encode(seccode))) {
             return 1;
         } else {
@@ -310,9 +299,7 @@ public class GeetestLib {
      * @return 验证结果, 1表示验证成功0表示验证失败
      */
     public int failbackValidateRequest(String challenge, String validate, String seccode) {
-
         gtlog("in failback validate");
-
         if (!resquestIsLegal(challenge, validate, seccode)) {
             return 0;
         }
@@ -329,14 +316,11 @@ public class GeetestLib {
 
         int decodeAns = decodeResponse(challenge, encodeAns);
         int decodeFullBgImgIndex = decodeResponse(challenge, encodeFullBgImgIndex);
-        int decodeImgGrpIndex = decodeResponse(challenge, encodeImgGrpIndex);
-
+        gtlog(String.formatted(
+                "encode----challenge:%s--ans:%s,bg_idx:%s,grp_idx:%s",
+                challenge, encodeAns, encodeFullBgImgIndex, encodeImgGrpIndex));
         gtlog(String.format("decode----ans:%s,bg_idx:%s,grp_idx:%s", decodeAns,
                 decodeFullBgImgIndex, decodeImgGrpIndex));
-
-        int validateResult = validateFailImage(decodeAns, decodeFullBgImgIndex, decodeImgGrpIndex);
-
-        return validateResult;
     }
 
 
@@ -347,9 +331,7 @@ public class GeetestLib {
      * @return
      */
     private int validateFailImage(int ans, int full_bg_index,
-                                  int img_grp_index) {
-        final int thread = 3;// 容差值
-
+        final int thread = 3;
         String full_bg_name = md5Encode(full_bg_index + "").substring(0, 9);
         String bg_name = md5Encode(img_grp_index + "").substring(10, 19);
 
@@ -367,7 +349,6 @@ public class GeetestLib {
         }
 
         String x_decode = answer_decode.substring(4, answer_decode.length());
-
         int x_int = Integer.valueOf(x_decode, 16);// 16 to 10
 
         int result = x_int % 200;
@@ -377,10 +358,8 @@ public class GeetestLib {
 
         if (Math.abs(ans - result) <= thread) {
             return 1;
-        } else {
-            return 0;
         }
-    }
+        return 0;
 
 
     /**
@@ -394,9 +373,6 @@ public class GeetestLib {
         if (string.length() > 100) {
             return 0;
         }
-
-        int[] shuzi = new int[]{1, 2, 5, 10, 50};
-        String chongfu = "";
         HashMap<String, Integer> key = new HashMap<String, Integer>();
         int count = 0;
 
@@ -405,16 +381,13 @@ public class GeetestLib {
 
             if (chongfu.contains(item) == true) {
                 continue;
-            } else {
-                int value = shuzi[count % 5];
-                chongfu += item;
-                count++;
-                key.put(item, value);
             }
         }
-
+        int[] shuzi = new int[]{1, 2, 5, 10, 50};
+        chongfu += item;
+        count++;
+        key.put(item, value);
         int res = 0;
-
         for (int j = 0; j < string.length(); j++) {
             res += key.get(string.charAt(j) + "");
         }
@@ -435,20 +408,15 @@ public class GeetestLib {
 
         String base = challenge.substring(32, 34);
         ArrayList<Integer> tempArray = new ArrayList<Integer>();
-
         for (int i = 0; i < base.length(); i++) {
             char tempChar = base.charAt(i);
             Integer tempAscii = (int) (tempChar);
-
             Integer result = (tempAscii > 57) ? (tempAscii - 87)
                     : (tempAscii - 48);
-
             tempArray.add(result);
         }
 
-        int decodeRes = tempArray.get(0) * 36 + tempArray.get(1);
-        return decodeRes;
-
+        return tempArray.get(0) * 36 + tempArray.get(1);
     }
 
 
@@ -481,13 +449,11 @@ public class GeetestLib {
     protected String postValidate(String host, String path, String data,
                                   int port) throws Exception {
         String response = "error";
-
         InetAddress addr = InetAddress.getByName(host);
         Socket socket = new Socket(addr, port);
         BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(
                 socket.getOutputStream(), "UTF8"));
         wr.write("POST " + path + " HTTP/1.0\r\n");
-        wr.write("Host: " + host + "\r\n");
         wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
         wr.write("Content-Length: " + data.length() + "\r\n");
         wr.write("\r\n"); // 以空行作为分割
@@ -499,7 +465,6 @@ public class GeetestLib {
         // 读取返回信息
         BufferedReader rd = new BufferedReader(new InputStreamReader(
                 socket.getInputStream(), "UTF-8"));
-        String line;
         while ((line = rd.readLine()) != null) {
             response = line;
         }
@@ -517,7 +482,7 @@ public class GeetestLib {
      * @return
      * @time 2014年7月10日 下午3:30:01
      */
-    private String md5Encode(String plainText) {
+    String md5Encode(String plainText) {
         String re_md5 = new String();
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -533,9 +498,7 @@ public class GeetestLib {
                     buf.append("0");
                 buf.append(Integer.toHexString(i));
             }
-
             re_md5 = buf.toString();
-
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
