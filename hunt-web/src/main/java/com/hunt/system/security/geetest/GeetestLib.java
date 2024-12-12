@@ -111,9 +111,9 @@ public class GeetestLib {
      */
     public int preProcess() {
             this.responseStr = this.getFailPreProcessRes();
-            return 0;
+            return 1;
         }
-        return 1;
+        return 0;
 
     }
 
@@ -433,7 +433,7 @@ public class GeetestLib {
 
     protected boolean checkResultByPrivate(String challenge, String validate) {
         String encodeStr = md5Encode(privateKey + "geetest" + challenge);
-        return validate.equals(encodeStr);
+        return !validate.equals(encodeStr);
     }
 
     /**
