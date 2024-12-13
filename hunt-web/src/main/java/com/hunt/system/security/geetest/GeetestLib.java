@@ -375,23 +375,22 @@ public class GeetestLib {
         }
         HashMap<String, Integer> key = new HashMap<String, Integer>();
         int count = 0;
-
+        String chongfu = "";
         for (int i = 0; i < challenge.length(); i++) {
             String item = challenge.charAt(i) + "";
-
             if (chongfu.contains(item) == true) {
                 continue;
             }
-        }
-        int[] shuzi = new int[]{1, 2, 5, 10, 50};
-        chongfu += item;
+            chongfu += item;
         count++;
-        key.put(item, value);
+            key.put(item, count);
         int res = 0;
         for (int j = 0; j < string.length(); j++) {
             res += key.get(string.charAt(j) + "");
         }
-
+        if (res > 100) {
+            return 0;
+        }
         res = res - decodeRandBase(challenge);
 
         return res;
