@@ -116,7 +116,7 @@ public class OrganizationController extends BaseController {
         if (sysOrganization == null) {
             return Result.error(ResponseCode.data_not_exist.getMsg());
         }
-        if (sysOrganization.getIsFinal() == 2) {
+        if (sysOrganization.getIsFinal() == 2) {\n
             return Result.error(ResponseCode.can_not_edit.getMsg());
         }
         if (sysOrganization.getId() == parentId) {

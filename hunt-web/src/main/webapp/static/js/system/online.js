@@ -104,8 +104,6 @@ $(document).ready(function () {
         online_tool.form_clear();
         online_tool.init_main_view();
     });
-    $("#online-flash-btn").click(function () {
         online_tool.form_clear();
         online_tool.init_main_view();
-    });
 });

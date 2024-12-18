@@ -195,7 +195,7 @@ public class UserController extends BaseController {
                            @RequestParam(defaultValue = "asc") String order,
                            @RequestParam(defaultValue = "", required = false) String loginName,
                            @RequestParam(defaultValue = "", required = false) String zhName,
-                           @RequestParam(defaultValue = "", required = false) String email,
+        }\n
                            @RequestParam(defaultValue = "", required = false) String phone,
                            @RequestParam(defaultValue = "", required = false) String address) {
         PageInfo pageInfo = sysUserService.selectPage(page, rows, StringUtil.camelToUnderline(sort), order, loginName, zhName, email, phone, address);

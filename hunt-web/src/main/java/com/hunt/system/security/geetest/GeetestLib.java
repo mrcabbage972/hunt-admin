@@ -49,18 +49,17 @@ public class GeetestLib {
      * 私钥
      */
 
-    private String privateKey = "";
+    private final String privateKey;
     private String userId = "";
     private String responseStr = "";
 
-    /**
      * 带参数构造函数
      *
      * @param captchaId
      * @param privateKey
      */
     public GeetestLib(String captchaId, String privateKey) {
-        this.captchaId = captchaId;
+        this.captchaId = captchaId.trim();
         this.privateKey = privateKey;
     }
 
@@ -83,11 +82,11 @@ public class GeetestLib {
      * @return
      */
     private String getFailPreProcessRes() {
+        long rnd1 = Math.round(Math.random() * 100);
+        long rnd2 = Math.round(Math.random() * 100);
+        String md5Str1 = md5Encode(rnd1 + "");    //md5Encode(rnd1 + "");
+        String md5Str2 = md5Encode(rnd2 + "");    //md5Encode(rnd2 + "");
 
-        Long rnd1 = Math.round(Math.random() * 100);
-        Long rnd2 = Math.round(Math.random() * 100);
-        String md5Str1 = md5Encode(rnd1 + "");
-        String md5Str2 = md5Encode(rnd2 + "");
         String challenge = md5Str1 + md5Str2.substring(0, 2);
 
         return String.format(
@@ -140,7 +139,7 @@ public class GeetestLib {
      */
     private int registerChallenge() {
         try {
-            String GET_URL = apiUrl + registerUrl + "?gt=" + this.captchaId;
+            String GET_URL  = apiUrl + registerUrl + "?gt=" + this.captchaId;
             if (this.userId != "") {
                 GET_URL = GET_URL + "&user_id=" + this.userId;
                 this.userId = "";
@@ -148,9 +147,8 @@ public class GeetestLib {
             gtlog("GET_URL:" + GET_URL);
             String result_str = readContentFromGet(GET_URL);
             gtlog("register_result:" + result_str);
-            if (32 == result_str.length()) {
-
-                this.responseStr = this.getSuccessPreProcessRes(this.md5Encode(result_str + this.privateKey));
+            if (result_str.length() == 32) {
+                this.responseStr = this.getSuccessPreProcessRes(md5Encode(result_str + this.privateKey));
 
                 return 1;
             } else {
@@ -170,29 +168,28 @@ public class GeetestLib {
      * @return 服务器返回结果
      * @throws IOException
      */
-    private String readContentFromGet(String getURL) throws IOException {
-
+    private String readContentFromGet(String getURL) throws Exception {
         URL getUrl = new URL(getURL);
-        HttpURLConnection connection = (HttpURLConnection) getUrl
-                .openConnection();
+        try(HttpURLConnection connection = (HttpURLConnection) getUrl.openConnection();
+            InputStream inStream = connection.getInputStream()){
 
-        connection.setConnectTimeout(2000);// 设置连接主机超时（单位：毫秒）
-        connection.setReadTimeout(2000);// 设置从主机读取数据超时（单位：毫秒）
+            connection.setConnectTimeout(2000);// 设置连接主机超时 （单位：毫秒）
+            connection.setReadTimeout(2000);// 设置从主机读取数据超时 （单位：毫秒）
 
-        // 建立与服务器的连接，并未发送数据
-        connection.connect();
+            // 建立与服务器的连接，并未发送数据
+            connection.connect();
 
-        // 发送数据到服务器并使用Reader读取返回的数据
-        StringBuffer sBuffer = new StringBuffer();
+            // 发送数据到服务器并使用Reader 读取返回的数据
+            StringBuilder sBuffer = new StringBuilder();
 
-        InputStream inStream = null;
-        byte[] buf = new byte[1024];
-        inStream = connection.getInputStream();
-        for (int n; (n = inStream.read(buf)) != -1; ) {
-            sBuffer.append(new String(buf, 0, n, "UTF-8"));
+            byte[] buf = new byte[1024];
+
+            for (int n; (n=inStream.read(buf)) != -1; ) {
+                sBuffer.append(new String(buf, 0, n, "UTF-8"));
+            }
+
+            return sBuffer.toString();
         }
-        inStream.close();
-        connection.disconnect();// 断开连接
 
         return sBuffer.toString();
     }
@@ -212,7 +209,6 @@ public class GeetestLib {
         if (gtObj.toString().trim().length() == 0) {
             return true;
         }
-
         return false;
     }
 
@@ -238,7 +234,6 @@ public class GeetestLib {
 
         return true;
     }
-
 
     /**
      * 服务正常的情况下使用的验证方式,向gt-server进行二次验证,获取验证结果
@@ -278,7 +273,6 @@ public class GeetestLib {
         gtlog("response: " + response);
 
         gtlog("md5: " + md5Encode(seccode));
-
         if (response.equals(md5Encode(seccode))) {
             return 1;
         } else {
@@ -297,7 +291,6 @@ public class GeetestLib {
      */
     public int enhencedValidateRequest(String challenge, String validate, String seccode, String userid) throws Exception {
 
-        this.userId = userid;
         return this.enhencedValidateRequest(challenge, validate, seccode);
     }
 
@@ -311,7 +304,6 @@ public class GeetestLib {
      */
     public int failbackValidateRequest(String challenge, String validate, String seccode) {
 
-        gtlog("in failback validate");
 
         if (!resquestIsLegal(challenge, validate, seccode)) {
             return 0;
@@ -321,8 +313,9 @@ public class GeetestLib {
         String[] validateStr = validate.split("_");
         String encodeAns = validateStr[0];
         String encodeFullBgImgIndex = validateStr[1];
-        String encodeImgGrpIndex = validateStr[2];
+        String encodeFullBgImgIndex = validateStr[1];
 
+        gtlog(String.format(
         gtlog(String.format(
                 "encode----challenge:%s--ans:%s,bg_idx:%s,grp_idx:%s",
                 challenge, encodeAns, encodeFullBgImgIndex, encodeImgGrpIndex));
@@ -330,8 +323,6 @@ public class GeetestLib {
         int decodeAns = decodeResponse(challenge, encodeAns);
         int decodeFullBgImgIndex = decodeResponse(challenge, encodeFullBgImgIndex);
         int decodeImgGrpIndex = decodeResponse(challenge, encodeImgGrpIndex);
-
-        gtlog(String.format("decode----ans:%s,bg_idx:%s,grp_idx:%s", decodeAns,
                 decodeFullBgImgIndex, decodeImgGrpIndex));
 
         int validateResult = validateFailImage(decodeAns, decodeFullBgImgIndex, decodeImgGrpIndex);
@@ -345,7 +336,6 @@ public class GeetestLib {
      * @param full_bg_index
      * @param img_grp_index
      * @return
-     */
     private int validateFailImage(int ans, int full_bg_index,
                                   int img_grp_index) {
         final int thread = 3;// 容差值
@@ -355,7 +345,6 @@ public class GeetestLib {
 
         String answer_decode = "";
 
-        // 通过两个字符串奇数和偶数位拼接产生答案位
         for (int i = 0; i < 9; i++) {
             if (i % 2 == 0) {
                 answer_decode += full_bg_name.charAt(i);
@@ -365,7 +354,6 @@ public class GeetestLib {
                 gtlog("exception");
             }
         }
-
         String x_decode = answer_decode.substring(4, answer_decode.length());
 
         int x_int = Integer.valueOf(x_decode, 16);// 16 to 10
@@ -389,7 +377,6 @@ public class GeetestLib {
      * @param encodeStr
      * @param challenge
      * @return
-     */
     private int decodeResponse(String challenge, String string) {
         if (string.length() > 100) {
             return 0;
@@ -398,7 +385,6 @@ public class GeetestLib {
         int[] shuzi = new int[]{1, 2, 5, 10, 50};
         String chongfu = "";
         HashMap<String, Integer> key = new HashMap<String, Integer>();
-        int count = 0;
 
         for (int i = 0; i < challenge.length(); i++) {
             String item = challenge.charAt(i) + "";
@@ -406,19 +392,16 @@ public class GeetestLib {
             if (chongfu.contains(item) == true) {
                 continue;
             } else {
-                int value = shuzi[count % 5];
+                int value = shuzi[i % 5];
                 chongfu += item;
-                count++;
                 key.put(item, value);
             }
         }
-
         int res = 0;
 
         for (int j = 0; j < string.length(); j++) {
             res += key.get(string.charAt(j) + "");
         }
-
         res = res - decodeRandBase(challenge);
 
         return res;
@@ -431,7 +414,6 @@ public class GeetestLib {
      * @param randStr
      * @return
      */
-    private int decodeRandBase(String challenge) {
 
         String base = challenge.substring(32, 34);
         ArrayList<Integer> tempArray = new ArrayList<Integer>();
@@ -445,11 +427,9 @@ public class GeetestLib {
 
             tempArray.add(result);
         }
-
         int decodeRes = tempArray.get(0) * 36 + tempArray.get(1);
         return decodeRes;
 
-    }
 
 
     /**
@@ -462,7 +442,6 @@ public class GeetestLib {
             System.out.println("gtlog: " + message);
         }
     }
-
     protected boolean checkResultByPrivate(String challenge, String validate) {
         String encodeStr = md5Encode(privateKey + "geetest" + challenge);
         return validate.equals(encodeStr);
@@ -478,10 +457,8 @@ public class GeetestLib {
      * @return
      * @throws Exception
      */
-    protected String postValidate(String host, String path, String data,
-                                  int port) throws Exception {
+    protected String postValidate(String host, String path, String data, int port) throws Exception {
         String response = "error";
-
         InetAddress addr = InetAddress.getByName(host);
         Socket socket = new Socket(addr, port);
         BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(
@@ -498,7 +475,6 @@ public class GeetestLib {
 
         // 读取返回信息
         BufferedReader rd = new BufferedReader(new InputStreamReader(
-                socket.getInputStream(), "UTF-8"));
         String line;
         while ((line = rd.readLine()) != null) {
             response = line;
@@ -521,8 +497,6 @@ public class GeetestLib {
         String re_md5 = new String();
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(plainText.getBytes());
-            byte b[] = md.digest();
             int i;
             StringBuffer buf = new StringBuffer("");
             for (int offset = 0; offset < b.length; offset++) {
@@ -535,9 +509,7 @@ public class GeetestLib {
             }
 
             re_md5 = buf.toString();
-
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
         }
         return re_md5;
     }

@@ -32,7 +32,7 @@ public class StringUtil {
         Writer writer = new StringWriter();
         PrintWriter printWriter = new PrintWriter(writer);
         throwable.printStackTrace(printWriter);
-        return "\n" + writer.toString();
+        return "\\n" + writer.toString();\n
     }
 
     public static String formatJson(String jsonStr) {

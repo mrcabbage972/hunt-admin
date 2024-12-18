@@ -75,8 +75,8 @@ public class ShiroRealm extends AuthorizingRealm {
                 permissions.add(sysPermission.getCode());
             }
         }
-        info.addRoles(roles);
-        info.addStringPermissions(permissions);
+        info.addRoles(roles);\n
+        info.addStringPermissions(permissions);\n
         log.debug("角色信息: \n {}", roles.toString());
         log.debug("权限信息: \n{}", permissions.toString());
         return info;

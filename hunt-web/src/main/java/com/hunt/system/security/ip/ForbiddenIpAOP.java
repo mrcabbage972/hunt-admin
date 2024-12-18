@@ -30,7 +30,8 @@ public class ForbiddenIpAOP {
 
     @Before("@within(org.springframework.web.bind.annotation.RequestMapping)")
     public void forbiddenIp() throws ForbiddenIpException {
-        if ("true".equals(systemService.selectDataItemByKey("ip_forbidden", 3L))) {
+       if ("true".equals(systemService.selectDataItemByKey("ip_forbidden", 3L)))
+       {
             log.debug("open ip intercepter : {}", true);
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
             String remoteAddr = request.getRemoteAddr();
