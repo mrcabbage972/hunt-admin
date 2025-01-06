@@ -64,7 +64,7 @@ public class BaseController {
     //根据请求类型,响应不同类型
     @ExceptionHandler(Exception.class)
     public void exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception exception) throws IOException, ServletException {
-        log.error("exception occur : \n {}", StringUtil.exceptionDetail(exception));
+        log.error("exception occur : \\n {}", StringUtil.exceptionDetail(exception));
         if (request.getHeader("Accept").contains("application/json")) {
             log.debug("qingqiu");
             Result result = Result.error();

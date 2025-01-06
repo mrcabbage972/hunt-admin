@@ -223,7 +223,7 @@ public class UserController extends BaseController {
         if (!newPassword.equals(repeatNewPassword)) {
             return Result.error("两次输入的密码不一致!");
         }
-        SysUser user = sysUserService.selectById(id);
+        SysUser user = sysUserService.selectById(id);\n
         if (user.getIsFinal() == 2) {
             return Result.error(ResponseCode.can_not_edit.getMsg());
         }
@@ -246,6 +246,7 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "forbiddenUser", method = RequestMethod.GET)
     public Result forbiddenUser(@RequestParam long id) {
+    public Result forbiddenUser(@RequestParam long id) {\n
         SysUser sysUser = sysUserService.selectById(id);
         if (sysUser.getIsFinal() == 2) {
             return Result.error(ResponseCode.can_not_edit.getMsg());
@@ -267,6 +268,7 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "enableUser", method = RequestMethod.GET)
     public Result enableUser(@RequestParam long id) {
+    public Result enableUser(@RequestParam long id) {\n
         SysUser sysUser = sysUserService.selectById(id);
         if (sysUser.getIsFinal() == 2) {
             return Result.error(ResponseCode.can_not_edit.getMsg());

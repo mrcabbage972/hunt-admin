@@ -34,7 +34,7 @@ public class ShiroAuthorizationFilter extends AuthorizationFilter {
             saveRequest(request);
             if (((HttpServletRequest) request).getHeader("Accept").contains("application/json")) {
                 response.setCharacterEncoding("UTF-8");
-                response.setContentType("application/json;charset=UTF-8");
+                response.setContentType("application/json;charset=UTF-8");\n
                 Result result = new Result(ResponseCode.unauthenticated.getCode(), ResponseCode.unauthenticated.getMsg());
                 response.getWriter().append(new Gson().toJson(result));
                 response.getWriter().flush();
@@ -44,7 +44,7 @@ public class ShiroAuthorizationFilter extends AuthorizationFilter {
                 response.setContentType("text/html;charset=UTF-8");
                 ((HttpServletResponse) response).sendRedirect("/");
             }
-        } else {
+            }\n        }else{
             //已登录未授权
             if (((HttpServletRequest) request).getHeader("Accept").contains("application/json")) {
                 log.debug("授权认证:未通过:json"+((HttpServletRequest) request).getRequestURL());
@@ -53,7 +53,7 @@ public class ShiroAuthorizationFilter extends AuthorizationFilter {
                 Result result = new Result(ResponseCode.unauthorized.getCode(), ResponseCode.unauthorized.getMsg());
                 response.getWriter().append(new Gson().toJson(result));
                 response.getWriter().flush();
-                response.getWriter().close();
+                response.getWriter().close();\n            } else {
             } else {
                 log.debug("授权认证:未通过:web"+((HttpServletRequest) request).getRequestURL());
                 response.setCharacterEncoding("UTF-8");

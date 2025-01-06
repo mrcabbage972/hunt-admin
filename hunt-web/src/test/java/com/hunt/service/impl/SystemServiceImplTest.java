@@ -1,11 +1,15 @@
 package com.hunt.service.impl;
 
+import com.hunt.model.entity.SysOrganization;
+import com.hunt.model.entity.SysPermission;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import com.hunt.service.SysOrganizationService;
+import com.hunt.service.SysPermissionService;
 import com.hunt.service.SystemService;
 
 /**
@@ -18,6 +22,8 @@ import com.hunt.service.SystemService;
 @Transactional
 public class SystemServiceImplTest {
     @Autowired
+    private SysPermissionService sysPermissionService;
+    @Autowired
     private SystemService service;
 
     @Test
@@ -26,8 +32,15 @@ public class SystemServiceImplTest {
     }
 
     @Test
-    public void clearAuthorizationInfoCacheByUserId() throws Exception {
-
+    public void selectDataItemByKey() throws Exception {
+        SysPermission sysPermission = new SysPermission();
+        sysPermission.setName("test permission name");
+        sysPermission.setCode("code");
+        sysPermission.setDescription("test permission description");
+        sysPermissionService.insertPermission(sysPermission);
+        String s = service.selectDataItemByKey("geetest_id", 1L);
+        String s1 = service.selectDataItemByKey("geetest_key", 1L);
+        System.out.println(s);
     }
 
     @Test
@@ -109,9 +122,5 @@ public class SystemServiceImplTest {
         System.out.println(s1);
     }
 
-    @Test
-    public void updateDateItem() throws Exception {
-
-    }
-
+}
 }

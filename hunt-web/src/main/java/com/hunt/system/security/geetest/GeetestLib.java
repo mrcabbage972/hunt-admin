@@ -90,8 +90,8 @@ public class GeetestLib {
         String md5Str2 = md5Encode(rnd2 + "");
         String challenge = md5Str1 + md5Str2.substring(0, 2);
 
-        return String.format(
-                "{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 0,
+        return String.format("{\\\"success\\\":%s,\\\"gt\\\":\\\"%s\\\",\\\"challenge\\\":\\\"%s\\\"}",
+                0,
                 this.captchaId, challenge);
     }
 
@@ -101,8 +101,8 @@ public class GeetestLib {
     private String getSuccessPreProcessRes(String challenge) {
 
         gtlog("challenge:" + challenge);
-        return String.format(
-                "{\"success\":%s,\"gt\":\"%s\",\"challenge\":\"%s\"}", 1,
+        return String.format("{\\\"success\\\":%s,\\\"gt\\\":\\\"%s\\\",\\\"challenge\\\":\\\"%s\\\"}",
+                1,
                 this.captchaId, challenge);
     }
 
@@ -261,7 +261,6 @@ public class GeetestLib {
         String query = String.format("seccode=%s&sdk=%s", seccode,
                 (this.sdkLang + "_" + this.verName));
         String response = "";
-
         if (this.userId != "") {
             query = query + "&user_id=" + this.userId;
             this.userId = "";
@@ -486,13 +485,13 @@ public class GeetestLib {
         Socket socket = new Socket(addr, port);
         BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(
                 socket.getOutputStream(), "UTF8"));
-        wr.write("POST " + path + " HTTP/1.0\r\n");
-        wr.write("Host: " + host + "\r\n");
-        wr.write("Content-Type: application/x-www-form-urlencoded\r\n");
-        wr.write("Content-Length: " + data.length() + "\r\n");
-        wr.write("\r\n"); // 以空行作为分割
+        wr.write("POST " + path + " HTTP/1.0\\r\\n");
+        wr.write("Host: " + host + "\\r\\n");
+        wr.write("Content-Type: application/x-www-form-urlencoded\\r\\n");
+        wr.write("Content-Length: " + data.length() + "\\r\\n");
+        wr.write("\\r\\n"); // 以空行作为分割\n
 
-        // 发送数据
+        // 发送数据\n
         wr.write(data);
         wr.flush();
 

@@ -66,7 +66,7 @@ public class ShiroRealm extends AuthorizingRealm {
         }
         List<SysUserRoleOrganization> userRoleOrganizations = sysUserRoleOrganizationMapper.selectByUserId(user.getId());
         for (SysUserRoleOrganization sysUserRoleOrganization : userRoleOrganizations) {
-            SysRoleOrganization sysRoleOrganization = sysRoleOrganizationMapper.selectById(sysUserRoleOrganization.getSysRoleOrganizationId());
+        for (SysUserRoleOrganization sysUserRoleOrganization : userRoleOrganizations) {
             SysRole sysRole = sysRoleMapper.selectById(sysRoleOrganization.getSysRoleId());
             roles.add(sysRole.getName());
             List<SysRolePermission> sysRolePermissions = sysRolePermissionMapper.selectByRoleId(sysRole.getId());

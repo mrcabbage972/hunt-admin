@@ -17,14 +17,14 @@
                 /system/captcha=anon
                 /static/**=anon
                 /system/logout = anon
-                /system/login=anon
-                /oauth/**=anon
-                /error/**=anon
+                /system/login = anon
+                /oauth/** = anon
+                /error/** = anon
                 /v2/**/=anon
                 /webjars/**=anon
                 /swagger-resources/**=anon
                 /swagger-ui.html/**=anon
-                /system/welcome=authc
+                 /system/welcome = authc
                 /**=authc
             </value>
         </property>

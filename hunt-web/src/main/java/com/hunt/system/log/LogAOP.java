@@ -72,7 +72,8 @@ public class LogAOP {
         log.setUrl(request.getRequestURL().toString());
         log.setUserAgent(request.getHeader("user-agent"));
         systemService.insertSysControllerLog(log);
-
+        log.setUserAgent(request.getHeader("user-agent"));
+        systemService.insertSysControllerLog(log);
         logger.info("request contentType:{}", request.getHeader("Accept"));
         logger.info("request param : {}", log.getParam());
         logger.info("reuest method : {}", request.getMethod());

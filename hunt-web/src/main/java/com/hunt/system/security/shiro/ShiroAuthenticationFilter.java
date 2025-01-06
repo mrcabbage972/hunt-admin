@@ -24,7 +24,7 @@ public class ShiroAuthenticationFilter extends PassThruAuthenticationFilter {
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         if (isLoginRequest(request, response)) {
             return true;
-        } else {
+        }else{
             saveRequest(request);
             if (((HttpServletRequest) request).getHeader("Accept").contains("application/json")) {
                 response.setCharacterEncoding("UTF-8");

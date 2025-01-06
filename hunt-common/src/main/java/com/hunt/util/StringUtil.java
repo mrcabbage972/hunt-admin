@@ -25,8 +25,7 @@ public class StringUtil {
      */
     public static String createPassword(String password, String salt, int hashIterations) {
         Md5Hash md5Hash = new Md5Hash(password.trim(), salt, hashIterations);
-        return md5Hash.toString();
-    }
+        return md5Hash.toString();    }
 
     public static String exceptionDetail(Throwable throwable) {
         Writer writer = new StringWriter();

@@ -11,7 +11,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+ import java.util.List;
+ import java.util.ArrayList;
 
 import static org.junit.Assert.assertTrue;
 
@@ -22,14 +23,15 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:spring.xml"})
 @Transactional
-public class SysRoleOrganizationServiceImplTest {
+ @WebAppConfiguration
+ public class SysRoleOrganizationServiceImplTest {
     @Autowired
     private SysRoleOrganizationService service;
 
     @Test
     public void isExistName() throws Exception {
         SysRoleOrganization ro = new SysRoleOrganization();
-        ro.setName("test");
+        ro.setName("test role organization");
         ro.setParentId(1L);
         service.insertRoleOrganization(ro);
         assertTrue(service.isExistName("test", 1L));
@@ -40,7 +42,7 @@ public class SysRoleOrganizationServiceImplTest {
     @Test
     public void insertRoleOrganization() throws Exception {
         SysRoleOrganization ro = new SysRoleOrganization();
-        ro.setName("test");
+        ro.setName("test role organization");
         ro.setParentId(1L);
         service.insertRoleOrganization(ro);
         assertTrue(ro.getId() != null);
@@ -49,7 +51,7 @@ public class SysRoleOrganizationServiceImplTest {
     @Test
     public void isExistNameExcludeId() throws Exception {
         SysRoleOrganization ro = new SysRoleOrganization();
-        ro.setName("test");
+        ro.setName("test role organization");
         ro.setParentId(1L);
         service.insertRoleOrganization(ro);
         assertTrue(!service.isExistNameExcludeId(ro.getId(), "test", 1L));
@@ -58,7 +60,7 @@ public class SysRoleOrganizationServiceImplTest {
     @Test
     public void updateRoleOrganization() throws Exception {
         SysRoleOrganization ro = new SysRoleOrganization();
-        ro.setName("test");
+        ro.setName("test role organization");
         ro.setParentId(1L);
         service.insertRoleOrganization(ro);
         ro.setName("test update");
@@ -70,7 +72,7 @@ public class SysRoleOrganizationServiceImplTest {
     @Test
     public void selectRoleOrganizationById() throws Exception {
         SysRoleOrganization ro = new SysRoleOrganization();
-        ro.setName("test");
+        ro.setName("test role organization");
         ro.setParentId(1L);
         service.insertRoleOrganization(ro);
         SysRoleOrganization sysRoleOrganization = service.selectRoleOrganizationById(ro.getId());
@@ -80,7 +82,7 @@ public class SysRoleOrganizationServiceImplTest {
     @Test
     public void selectPage() throws Exception {
         SysRoleOrganization ro = new SysRoleOrganization();
-        ro.setName("test");
+        ro.setName("test role organization");
         ro.setParentId(1L);
         service.insertRoleOrganization(ro);
         for (int i = 0; i < 20; i++) {
@@ -96,7 +98,7 @@ public class SysRoleOrganizationServiceImplTest {
     @Test
     public void selectSysRoleOrganizationTree() throws Exception {
         SysRoleOrganization ro = new SysRoleOrganization();
-        ro.setName("test");
+        ro.setName("test role organization");
         ro.setParentId(1L);
         service.insertRoleOrganization(ro);
         for (int i = 0; i < 20; i++) {
@@ -112,7 +114,7 @@ public class SysRoleOrganizationServiceImplTest {
     @Test
     public void selectSysRoleOrganizationTreeChildrenList() throws Exception {
         SysRoleOrganization ro = new SysRoleOrganization();
-        ro.setName("test");
+        ro.setName("test role organization");
         ro.setParentId(1L);
         service.insertRoleOrganization(ro);
         for (int i = 0; i < 20; i++) {

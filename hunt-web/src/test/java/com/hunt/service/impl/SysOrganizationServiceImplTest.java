@@ -51,6 +51,10 @@ public class SysOrganizationServiceImplTest {
         o.setFullName("test full name");
         o.setDescription("test desc");
         o.setParentId(2L);
+        SysRole role = new SysRole();
+        role.setName("test role name");
+        role.setDescription("test role desc");
+        sysRoleService.insertRole(role, "");
         o.setIsFinal(2);
         service.insertOrganization(o);
         assertTrue(o.getId() != null);

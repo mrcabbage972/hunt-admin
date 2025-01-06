@@ -48,7 +48,6 @@ public class RedisCache<K, V> implements Cache<K, V>, Serializable {
         redisTemplate.opsForValue().set((K) (shiro_cache_prefix + key), value, timeout, TimeUnit.SECONDS);
         return value;
     }
-
     @Override
     public V remove(K key) throws CacheException {
         log.debug("redis cache remove :{}", key.toString());
