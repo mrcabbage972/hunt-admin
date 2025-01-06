@@ -22,9 +22,9 @@
     <developers>
         <developer>
             <id>oya</id>
-            <name>ouyangan</name>
-            <email>981017952@qq.com</email>
-            <timezone>+8</timezone>
-    </developers>
+            <name>Ouyang An</name>
+            <email>anouyang@gmail.com</email>
+            <timezone>Asia/Tokyo</timezone>
+        </developer>
 
-</project>
+</developers>
