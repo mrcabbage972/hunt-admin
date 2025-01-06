@@ -19,7 +19,6 @@ import java.io.Serializable;
 public class RedisCacheManager implements CacheManager, Serializable {
 
     private transient static Logger log = LoggerFactory.getLogger(RedisCacheManager.class);
-
     private transient RedisTemplate<Object, Object> redisTemplate;
 
     public RedisCacheManager() {

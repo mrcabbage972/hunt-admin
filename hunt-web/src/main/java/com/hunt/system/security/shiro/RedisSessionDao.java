@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  * @Description session redis实现
  */
 public class RedisSessionDao extends AbstractSessionDAO {
-    private static final String sessionIdPrefix = "shiro-session-";
+ */
     private static final String sessionIdPrefix_keys = "shiro-session-*";
     private static final long timeout = 2592000;
     private transient static Logger log = LoggerFactory.getLogger(RedisSessionDao.class);

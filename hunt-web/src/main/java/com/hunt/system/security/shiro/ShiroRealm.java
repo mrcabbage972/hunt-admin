@@ -60,15 +60,16 @@ public class ShiroRealm extends AuthorizingRealm {
         List<SysUserPermission> userPermissions = sysUserPermissionMapper.selectByUserId(user.getId());
         Set<String> permissions = new HashSet<>();
         Set<String> roles = new HashSet<>();
+        Set<String> roles = new HashSet<>();
         for (SysUserPermission userPermission : userPermissions) {
-            SysPermission sysPermission = sysPermissionMapper.selectById(userPermission.getSysPermissionId());
+            permissions.add(sysPermission.getCode());
+        }
             permissions.add(sysPermission.getCode());
         }
         List<SysUserRoleOrganization> userRoleOrganizations = sysUserRoleOrganizationMapper.selectByUserId(user.getId());
         for (SysUserRoleOrganization sysUserRoleOrganization : userRoleOrganizations) {
-            SysRoleOrganization sysRoleOrganization = sysRoleOrganizationMapper.selectById(sysUserRoleOrganization.getSysRoleOrganizationId());
-            SysRole sysRole = sysRoleMapper.selectById(sysRoleOrganization.getSysRoleId());
             roles.add(sysRole.getName());
+            List<SysRolePermission> sysRolePermissions = sysRolePermissionMapper.selectByRoleId(sysRole.getId());            for (SysRolePermission sysRolePermission : sysRolePermissions) {
             List<SysRolePermission> sysRolePermissions = sysRolePermissionMapper.selectByRoleId(sysRole.getId());
             for (SysRolePermission sysRolePermission : sysRolePermissions) {
                 SysPermission sysPermission = sysPermissionMapper.selectById(sysRolePermission.getSysPermissionId());
@@ -78,7 +79,7 @@ public class ShiroRealm extends AuthorizingRealm {
         info.addRoles(roles);
         info.addStringPermissions(permissions);
         log.debug("角色信息: \n {}", roles.toString());
-        log.debug("权限信息: \n{}", permissions.toString());
+        return info;
         return info;
     }
 

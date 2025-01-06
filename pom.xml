@@ -25,10 +25,6 @@
             <name>ouyangan</name>
             <email>981017952@qq.com</email>
             <timezone>+8</timezone>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </developer>
     </developers>
 
 </project>

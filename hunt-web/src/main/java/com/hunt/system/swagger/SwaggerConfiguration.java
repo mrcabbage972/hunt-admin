@@ -27,7 +27,6 @@ public class SwaggerConfiguration {
                 .apiInfo(apiInfo());
     }
 
-
     private ApiInfo apiInfo() {
         Contact contact = new Contact("欧阳安", "", "981017952@qq.com");
         ApiInfo apiInfo = new ApiInfo(

@@ -51,8 +51,7 @@ public class BaseController {
         String seccode = request.getParameter(GeetestLib.fn_geetest_seccode);
         log.debug("challenge: {} ,validate: {} ,seccode: {}", challenge, validate, seccode);
         int gt_server_status_code = (Integer) request.getSession().getAttribute(gtSdk.gtServerStatusSessionKey);
-        log.debug("极限验证服务器状态 : {}", gt_server_status_code);
-        if (gt_server_status_code == 1) {
+        log.debug("极限验证服务器状态 : {}", gt_server_status_code);        if (gtServerStatusCode == 1) {
             verifyResult = gtSdk.enhencedValidateRequest(challenge, validate, seccode);
         } else {
             verifyResult = gtSdk.failbackValidateRequest(challenge, validate, seccode);

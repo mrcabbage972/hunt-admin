@@ -6,14 +6,14 @@
         <artifactId>hunt-parent</artifactId>
         <groupId>com.anouyang.hunt</groupId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../hunt-parent/pom.xml</relativePath>
-    </parent>
+        <java.target.version>1.7</java.target.version>
+        <file.encoding>UTF-8</file.encoding>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>hunt-common</artifactId>
 
     <dependencies>
-        <dependency>
+        <java.version>1.8</java.version>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-core</artifactId>
         </dependency>

@@ -269,15 +269,14 @@
                 <directory>src/main/resources/env/${profiles.active}</directory>
                 <filtering>true</filtering>
             </resource>
-        </resources>
+    <dependencies>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                <version>3.8.1</version>\n                <configuration>\n                    <source>17</source>\n                    <target>17</target>
                     <showWarnings>true</showWarnings>
                     <encoding>UTF-8</encoding>
                 </configuration>

@@ -38,6 +38,7 @@ public class RedisCache<K, V> implements Cache<K, V>, Serializable {
     @Override
     public V get(K key) throws CacheException {
         log.debug("根据key:{}从redis获取对象", key);
+        log.debug("根据key:{}从redis获取对象", key);
         log.debug("redisTemplate : {}", redisTemplate);
         return redisTemplate.opsForValue().get(shiro_cache_prefix + key);
     }
@@ -47,7 +48,6 @@ public class RedisCache<K, V> implements Cache<K, V>, Serializable {
         log.debug("根据key:{}从redis删除对象", key);
         redisTemplate.opsForValue().set((K) (shiro_cache_prefix + key), value, timeout, TimeUnit.SECONDS);
         return value;
-    }
 
     @Override
     public V remove(K key) throws CacheException {
@@ -57,6 +57,7 @@ public class RedisCache<K, V> implements Cache<K, V>, Serializable {
         return value;
     }
 
+    @Override
     @Override
     public void clear() throws CacheException {
         log.debug("清除redis所有缓存对象");
@@ -70,15 +71,19 @@ public class RedisCache<K, V> implements Cache<K, V>, Serializable {
         log.debug("获取redis缓存对象数量:{}", keys.size());
         return keys.size();
     }
-
+        Set<K> keys = redisTemplate.keys((K) shiro_cache_prefix_keys);
+        log.debug("获取redis缓存对象数量:{}", keys.size());
     @Override
-    public Set<K> keys() {
+    }
+
         Set<K> keys = redisTemplate.keys((K)shiro_cache_prefix_keys);
         log.debug("获取所有缓存对象的key");
-        if (keys.size() == 0) {
+        Set<K> keys = redisTemplate.keys((K)shiro_cache_prefix_keys);
+        log.debug("获取所有缓存对象的key");
             return Collections.emptySet();
         }
         return keys;
+    }
     }
 
     @Override
@@ -89,7 +94,6 @@ public class RedisCache<K, V> implements Cache<K, V>, Serializable {
             return Collections.emptySet();
         }
         List<V> vs = redisTemplate.opsForValue().multiGet(keys);
-
         return Collections.unmodifiableCollection(vs);
     }
 

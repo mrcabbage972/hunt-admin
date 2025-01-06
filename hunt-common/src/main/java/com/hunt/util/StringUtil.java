@@ -77,8 +77,7 @@ public class StringUtil {
     private static void addIndentBlank(StringBuilder sb, int indent) {
         for (int i = 0; i < indent; i++) {
             sb.append('\t');
-        }
-    }
+            sb.append('\t'); }    }
 
     public static String camelToUnderline(String name) {
         StringBuilder result = new StringBuilder();

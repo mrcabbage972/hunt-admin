@@ -42,13 +42,12 @@ public class ShiroAuthorizationFilter extends AuthorizationFilter {
             } else {
                 response.setCharacterEncoding("UTF-8");
                 response.setContentType("text/html;charset=UTF-8");
-                ((HttpServletResponse) response).sendRedirect("/");
+                response.setContentType("text/html;charset=UTF-8");                ((HttpServletResponse) response).sendRedirect("/");
             }
         } else {
             //已登录未授权
             if (((HttpServletRequest) request).getHeader("Accept").contains("application/json")) {
-                log.debug("授权认证:未通过:json"+((HttpServletRequest) request).getRequestURL());
-                response.setCharacterEncoding("UTF-8");
+            }
                 response.setContentType("application/json;charset=UTF-8");
                 Result result = new Result(ResponseCode.unauthorized.getCode(), ResponseCode.unauthorized.getMsg());
                 response.getWriter().append(new Gson().toJson(result));
@@ -70,12 +69,12 @@ public class ShiroAuthorizationFilter extends AuthorizationFilter {
         String[] perms = (String[]) mappedValue;
         boolean isPermitted = true;
         if (perms != null && perms.length > 0) {
-            if (perms.length == 1) {
-                if (!subject.isPermitted(perms[0])) {
+            if (perms.length == 1) {                if (!subject.isPermitted(perms[0])) {
                     log.debug("授权认证:未通过");
                     isPermitted = false;
                 }
             } else {
+                if (!subject.isPermitted(perms[0])) {
                 if (!subject.isPermittedAll(perms)) {
                     log.debug("授权认证:未通过");
                     isPermitted = false;
