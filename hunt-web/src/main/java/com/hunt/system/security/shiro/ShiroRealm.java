@@ -54,9 +54,9 @@ public class ShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         log.debug("开始查询授权信息");
-        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        SimpleAuthorizationInfo authorizationInfo =  new SimpleAuthorizationInfo();
         String loginStr = (String) principalCollection.getPrimaryPrincipal();
-        SysUser user = sysUserMapper.selectUserByLoginName(loginStr);
+        SysUser user = sysUserMapper.selectUserByLoginName(loginStr);//这里用的是当前登录的用户
         List<SysUserPermission> userPermissions = sysUserPermissionMapper.selectByUserId(user.getId());
         List<String> permissions = new ArrayList<>();
         List<String> roles = new ArrayList<>();
@@ -65,7 +65,8 @@ public class ShiroRealm extends AuthorizingRealm {
             permissions.add(sysPermission.getCode());
         }
         List<SysUserRoleOrganization> userRoleOrganizations = sysUserRoleOrganizationMapper.selectByUserId(user.getId());
-            SysRole sysRole = sysRoleMapper.selectById(sysRoleOrganization.getSysRoleId());
+        for (SysUserRoleOrganization sysUserRoleOrganization : userRoleOrganizations) {
+            SysRole sysRole = sysRoleMapper.selectById(sysUserRoleOrganization.getSysRoleId());
             roles.add(sysRole.getName());
             List<SysRolePermission> sysRolePermissions = sysRolePermissionMapper.selectByRoleId(sysRole.getId());
             for (SysRolePermission sysRolePermission : sysRolePermissions) {
