@@ -1,5 +1,6 @@
 package com.hunt.system.security.shiro;
 
+import com.hunt.common.utils.StringUtils;
 import com.hunt.dao.*;
 import com.hunt.model.entity.*;
 import com.hunt.util.SystemConstant;
@@ -17,10 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 /**
  * @Author: ouyangan
  * @Date : 2016/10/7
@@ -30,6 +28,8 @@ public class ShiroRealm extends AuthorizingRealm {
     private static Logger log = LoggerFactory.getLogger(ShiroRealm.class);
     @Autowired
     private SysUserPermissionMapper sysUserPermissionMapper;
+    @Autowired
+    private SysUserMapper sysUserMapper;
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired
@@ -44,7 +44,7 @@ public class ShiroRealm extends AuthorizingRealm {
     private SysRolePermissionMapper sysRolePermissionMapper;
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
-
+ 47 |
     /**
      * 鉴权信息
      *
@@ -54,19 +54,17 @@ public class ShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         log.debug("开始查询授权信息");
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         String loginStr = (String) principalCollection.getPrimaryPrincipal();
         SysUser user = sysUserMapper.selectUserByLoginName(loginStr);
         List<SysUserPermission> userPermissions = sysUserPermissionMapper.selectByUserId(user.getId());
-        Set<String> permissions = new HashSet<>();
-        Set<String> roles = new HashSet<>();
+        List<String> permissions = new ArrayList<>();
+        List<String> roles = new ArrayList<>();
         for (SysUserPermission userPermission : userPermissions) {
             SysPermission sysPermission = sysPermissionMapper.selectById(userPermission.getSysPermissionId());
             permissions.add(sysPermission.getCode());
         }
         List<SysUserRoleOrganization> userRoleOrganizations = sysUserRoleOrganizationMapper.selectByUserId(user.getId());
-        for (SysUserRoleOrganization sysUserRoleOrganization : userRoleOrganizations) {
-        for (SysUserRoleOrganization sysUserRoleOrganization : userRoleOrganizations) {
             SysRole sysRole = sysRoleMapper.selectById(sysRoleOrganization.getSysRoleId());
             roles.add(sysRole.getName());
             List<SysRolePermission> sysRolePermissions = sysRolePermissionMapper.selectByRoleId(sysRole.getId());
@@ -75,11 +73,11 @@ public class ShiroRealm extends AuthorizingRealm {
                 permissions.add(sysPermission.getCode());
             }
         }
-        info.addRoles(roles);
-        info.addStringPermissions(permissions);
-        log.debug("角色信息: \n {}", roles.toString());
-        log.debug("权限信息: \n{}", permissions.toString());
-        return info;
+        authorizationInfo.addRoles(roles);
+        authorizationInfo.addStringPermissions(permissions);
+        log.debug("角色信息: \n {}", roles);
+        log.debug("权限信息: \n{}", permissions);
+        return authorizationInfo;
     }
 
     /**
@@ -92,12 +90,23 @@ public class ShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         log.debug("登录验证");
+        UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String loginName = (String) authenticationToken.getPrincipal();
         SysUser sysUser = sysUserMapper.selectUserByLoginName(loginName);
-        AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(loginName, sysUser.getPassword(), ByteSource.Util.bytes(sysUser.getPasswordSalt()), getName());
+        if (sysUser == null) {
+            throw new UnknownAccountException(); // 账号不存在
+        }
+        if (sysUser.getStatus() == SystemConstant.USER_STATUS_FROZEN) {
+            throw new LockedAccountException(); // 账号被冻结
+        }
+        AuthenticationInfo authenticationInfo = null;
+        if (StringUtils.isEmpty(sysUser.getPassword())) {
+            authenticationInfo = new SimpleAuthenticationInfo(loginName, token.getPassword(), getName());
+        } else {
+            authenticationInfo = new SimpleAuthenticationInfo(loginName, sysUser.getPassword(), ByteSource.Util.bytes(sysUser.getPasswordSalt()), getName());
+        }
         return authenticationInfo;
     }
-
     @Override
     protected void doClearCache(PrincipalCollection principals) {
         redisTemplate.delete(SystemConstant.shiro_cache_prefix + principals.getPrimaryPrincipal().toString());
